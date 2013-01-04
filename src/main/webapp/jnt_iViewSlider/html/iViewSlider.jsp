@@ -76,16 +76,15 @@
             }
             .iviewid {
                 margin: 0;
-                padding: 5px;
+                padding: ${currentNode.properties.border.long}px;
             }
 
-            /* Note if we ar enot carefull setting the size, we get image artifacts */
             #iview-${currentNode.UUID} {
-                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long}px;</c:if>
+                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long-currentNode.properties.border.long*2}px;</c:if>
                 <c:if test="${not empty currentNode.properties.height}">height:${currentNode.properties.height.long-currentNode.properties.border.long*2}px;</c:if>
             }
             #iview-${currentNode.UUID} .iviewSlider {
-                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long}px;</c:if>
+                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long-currentNode.properties.border.long*2}px;</c:if>
                 <c:if test="${not empty currentNode.properties.height}">height:${currentNode.properties.height.long-currentNode.properties.border.long*2}px;</c:if>
             }
         </style>
