@@ -10,8 +10,8 @@
 <c:if test="${not renderContext.editMode}">
     <div
             data-iview:image="${url.files}${currentNode.properties['image'].node.path}"
-            <c:if test="${not empty currentNode.properties.transition}"> data-transition="<c:forEach items="${currentNode.properties['transition']}" var="transition">${transition.string},</c:forEach>"</c:if>
-            <c:if test="${not empty currentNode.properties.pauseTime}"> data-pausetime="${currentNode.properties.pauseTime.long}"</c:if>
+            <c:if test="${not empty currentNode.properties.transition}"> data-iview:transition="<c:forEach items="${currentNode.properties['transition']}" var="transition">${transition.string},</c:forEach>"</c:if>
+            <c:if test="${not empty currentNode.properties.pauseTime}">  data-iview:pausetime="${currentNode.properties.pauseTime.long}"</c:if>
             >
         <c:forEach items="${currentNode.nodes}" var="items">
             <template:module node="${items}" />
