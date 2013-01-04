@@ -1,0 +1,27 @@
+package org.jahia.services.content.rules
+
+#list any import classes here.
+import org.jahia.services.content.rules.*
+import org.jahia.services.content.JCRContentUtils
+import org.slf4j.Logger
+
+expander rules.dsl
+
+#declare any global variables here
+global User user
+global Service service
+global IViewImageService iViewImageService
+global ExtractionService extractionService
+global Logger logger
+global JCRContentUtils jcrUtils
+
+
+rule "iView Crop Image"
+   when
+       A property image has been set on a node
+        - the node has the type jnt:iViewSliderItem
+        - not in operation import
+   then
+        Crop image "image"
+        Log "Image cropped " + node.getPath()
+end

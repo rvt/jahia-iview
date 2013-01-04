@@ -1,0 +1,69 @@
+<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+<jmix = 'http://www.jahia.org/jahia/mix/1.0'>
+
+
+[jnt:iViewSlider] > jnt:contentList, jmix:multimediaContent, jmix:editorialContent, jmix:droppableContent
+ - width (long) = 960 indexed=no
+ - height (long) = 400 indexed=no
+ - border (long) = 5 indexed=no
+ - skin (string, choicelist) = 'skin 1' indexed=no < 'skin 1','skin 2','skin 3','skin 4','skin 5','skin 6','skin 7'
+ - fx (string, choicelist[resourceBundle]) = 'random' indexed=no < 'random','strip-down-right','strip-down-left','strip-up-right','strip-up-left','strip-up-down','strip-up-down-left','strip-left-right','strip-left-right-down','slide-in-right','slide-in-left','slide-in-up','slide-in-down','left-curtain','right-curtain','top-curtain','bottom-curtain','fade','block-random','block-fade','block-fade-reverse','block-expand','block-expand-reverse','block-expand-random','block-drop-random','zigzag-top','zigzag-bottom','zigzag-grow-top','zigzag-grow-bottom','zigzag-drop-top','zigzag-drop-bottom','strip-left-fade','strip-right-fade','strip-top-fade','strip-bottom-fade'
+ - easing (string, choicelist[resourceBundle]) indexed=no < '', 'easeOutQuad','swing','easeOutQuad','easeInOutQuad','easeInCubic','easeOutCubic','easeInOutCubic','easeInQuart','easeOutQuart','easeInOutQuart','easeInQuint','easeOutQuint','easeInOutQuint','easeInSine','easeOutSine','easeInOutSine','easeInExpo','easeOutExpo','easeInOutExpo','easeInCirc','easeOutCirc','easeInOutCirc','easeInElastic','easeOutElastic','easeInOutElastic','easeInBack','easeOutBack','easeInOutBack','easeInBounce','easeOutBounce','easeInOutBounce'
+ - strips (long) = 20 indexed=no
+ - blockCols (long) = 10 indexed=no
+ - blockRows (long) = 5 indexed=no
+ - captionSpeed (long) = 500 indexed=no
+ - captionEasing (string, choicelist[resourceBundle]) = 'easeInOutSine' indexed=no < 'easeOutQuad','swing','easeOutQuad','easeInOutQuad','easeInCubic','easeOutCubic','easeInOutCubic','easeInQuart','easeOutQuart','easeInOutQuart','easeInQuint','easeOutQuint','easeInOutQuint','easeInSine','easeOutSine','easeInOutSine','easeInExpo','easeOutExpo','easeInOutExpo','easeInCirc','easeOutCirc','easeInOutCirc','easeInElastic','easeOutElastic','easeInOutElastic','easeInBack','easeOutBack','easeInOutBack','easeInBounce','easeOutBounce','easeInOutBounce'
+ - captionOpacity (double) = 1 indexed=no
+ - animationSpeed (long) = 500 indexed=no
+ - pauseTime (long) = 5000 indexed=no
+ - startSlide (long) = 0 indexed=no
+ - directionNav (boolean) = false indexed=no
+ - directionNavHide (boolean) = true indexed=no
+ - directionNavHoverOpacity (double) = 0.6 indexed=no
+ - controlNav (boolean) = true indexed=no
+ - controlNavNextPrev (boolean) = true indexed=no
+ - controlNavHoverOpacity (double) = 0.6 indexed=no
+ - controlNavThumbs (boolean) = false indexed=no
+ - controlNavTooltip (boolean) = true indexed=no
+ - autoAdvance (boolean) = true indexed=no
+ - keyboardNav (boolean) = true indexed=no
+ - touchNav (boolean) = true indexed=no
+ - pauseOnHover (boolean) = true indexed=no
+ - nextLabel (String) = 'Next' i18n indexed=no
+ - previousLabel (String) = 'Previous' i18n indexed=no
+ - playLabel (String) = 'Play' i18n indexed=no
+ - pauseLabel (String) = 'Pause' i18n indexed=no
+ - closeLabel (String) = 'Close' i18n indexed=no
+ - randomStart (boolean) = false indexed=no
+ - timer (string, choicelist[resourceBundle]) = 'Pie' indexed=no < 'Pie','360Bar','Bar'
+ - timerPosition (string, choicelist[resourceBundle]) = 'top-right' indexed=no < 'top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'
+ - timerBG (string,color) = '000' indexed=no
+ - timerColor (string,color) = 'EEE' indexed=no
+ - timerOpacity (double) = 0.5 indexed=no
+ - timerDiameter (long) = 30 indexed=no
+ - timerPadding (long) = 4 indexed=no
+ - timerStroke (long) = 1 indexed=no
+ - timerBarStrokeColor (string,color) = 'EEE' indexed=no
+ - timerBarStrokeStyle (string, choicelist[resourceBundle]) = 'solid' indexed=no < 'solid','dotted','dashed','double','groove','ridge'
+ - timerX (long) = 10 indexed=no
+ - timerY (long) = 10 indexed=no
+ - tooltipX (long) = 5 indexed=no
+ - tooltipY (long) = 5 indexed=no
+ + * (jnt:iViewSliderItem)
+
+[jnt:iViewSliderItem] > jnt:contentList
+ - image (weakreference, picker[type='image']) i18n mandatory
+ - transition (string,choicelist[resourceBundle]) indexed=no multiple < 'strip-down-right', 'strip-down-left', 'strip-up-right', 'strip-up-left', 'strip-up-down', 'strip-up-down-left', 'strip-left-right', 'strip-left-right-down', 'slide-in-right', 'slide-in-left', 'slide-in-up', 'slide-in-down', 'left-curtain', 'right-curtain', 'top-curtain', 'bottom-curtain', 'fade', 'block-random', 'block-fade', 'block-fade-reverse', 'block-expand', 'block-expand-reverse', 'block-expand-random', 'block-drop-random', 'zigzag-top', 'zigzag-bottom', 'zigzag-grow-top', 'zigzag-grow-bottom', 'zigzag-drop-top', 'zigzag-drop-bottom', 'strip-left-fade', 'strip-right-fade', 'strip-top-fade', 'strip-bottom-fade'
+ - pauseTime (long) indexed=no
+ + * (jnt:iViewSliderCaption)
+
+[jnt:iViewSliderCaption] > jnt:content
+ - caption (string, richtext) i18n mandatory
+ - transition (string, choicelist[resourceBundle]) indexed=no < 'wipeLeft', 'wipeRight', 'wipeTop', 'wipeBottom', 'expandLeft', 'expandRight', 'expandTop', 'expandBottom', 'fade'
+ - easing (string, choicelist[resourceBundle]) indexed=no < 'easeOutQuad','swing','easeOutQuad','easeInOutQuad','easeInCubic','easeOutCubic','easeInOutCubic','easeInQuart','easeOutQuart','easeInOutQuart','easeInQuint','easeOutQuint','easeInOutQuint','easeInSine','easeOutSine','easeInOutSine','easeInExpo','easeOutExpo','easeInOutExpo','easeInCirc','easeOutCirc','easeInOutCirc','easeInElastic','easeOutElastic','easeInOutElastic','easeInBack','easeOutBack','easeInOutBack','easeInBounce','easeOutBounce','easeInOutBounce'
+ - speed (long) indexed=no
+ - width (long) indexed=no
+ - height (long) indexed=no
+ - posX (long) indexed=no
+ - posY (long) indexed=no

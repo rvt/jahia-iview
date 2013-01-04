@@ -1,0 +1,27 @@
+
+/*
+    Special overrides needed for Jahia
+*/
+.bodywrapper #content .iview-caption p {
+    margin: 0;
+    padding: 0;
+}
+
+.bodywrapper #content .iview-caption h1,
+.bodywrapper #content .iview-caption h2,
+.bodywrapper #content .iview-caption h3,
+.bodywrapper #content .iview-caption h4,
+.bodywrapper #content .iview-caption h5,
+.bodywrapper #content .iview-caption h6 {
+    border:none;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+.caption-contain p,
+.caption-contain {
+    padding: 0;
+    margin: 0;
+}
