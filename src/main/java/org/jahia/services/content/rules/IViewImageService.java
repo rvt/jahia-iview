@@ -41,10 +41,11 @@
 package org.jahia.services.content.rules;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.drools.ObjectFilter;
 import org.drools.spi.KnowledgeHelper;
 import org.jahia.api.Constants;
+import org.jahia.services.content.JCRContentUtils;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRPropertyWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -56,10 +57,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 /**
@@ -71,6 +71,7 @@ import java.util.Iterator;
 public class IViewImageService {
 
     private static final Logger logger = LoggerFactory.getLogger(IViewImageService.class);
+    public static final String IVIEW_NODE_NAME_PREFIX ="jahia-iview";
 
     private JahiaImageService imageService;
 
@@ -150,26 +151,54 @@ public class IViewImageService {
         int height = (int) sliderNode.getProperty("height").getLong() - border*2;
 
         // Create a new image
-        cropScale(new AddedNodeFact(node), bannerNode, name, width, height, session, drools);
+        cropScale(new AddedNodeFact(node), IViewImageService.iViewNodeName(bannerNode), width, height, session, drools);
     }
 
-    private void cropScale(AddedNodeFact imageNode, JCRNodeWrapper bannerNode, String name, int width, int height, JCRSessionWrapper session, KnowledgeHelper drools) throws Exception {
+    /**
+     * Retreive a name for this crop scaled image
+     * @param bannerNode
+     * @return
+     * @throws Exception
+     */
+    public static String iViewNodeName(JCRNodeWrapper bannerNode) throws Exception {
+        JCRNodeWrapper sliderNode = bannerNode.getParent();
+
+        int border = (int) sliderNode.getProperty("border").getLong();
+        int width = (int) sliderNode.getProperty("width").getLong() - border*2;
+        int height = (int) sliderNode.getProperty("height").getLong() - border*2;
+
+        return IVIEW_NODE_NAME_PREFIX +"_"+width+"x"+height;
+    }
+
+    private void cropScale(AddedNodeFact imageNode, String nodeName, int width, int height, JCRSessionWrapper session, KnowledgeHelper drools) throws Exception {
         long timer = System.currentTimeMillis();
 
-        // Crop the image
-
-        if (this.isSmallerThan(imageNode.getNode(), width, height)) {
-            logger.info("Selected image was smaller then required image of {}x{} not cropping this image",width,height);
+        if (imageNode.getNode().hasNode(nodeName)) {
+            JCRNodeWrapper node = imageNode.getNode().getNode(nodeName);
+            Calendar thumbDate = node.getProperty("jcr:lastModified").getDate();
+            Calendar contentDate = imageNode.getNode().getNode("jcr:content").getProperty("jcr:lastModified").getDate();
+            if (contentDate.after(thumbDate)) {
+                AddedNodeFact thumbNode = new AddedNodeFact(node);
+                File f = crop(imageNode, 0, 0, width, height, drools);
+                if (f == null) {
+                    return;
+                }
+                drools.insert(new ChangedPropertyFact(thumbNode, Constants.JCR_DATA, f, drools));
+                drools.insert(new ChangedPropertyFact(thumbNode, Constants.JCR_LASTMODIFIED, new GregorianCalendar(), drools));
+            }
         } else {
-            JCRNodeWrapper newImage = crop(imageNode, "_iview", 0, 0, width, height, session, drools);
-            if (newImage == null) {
-                logger.warn("No cropped image was generated");
+            File f = crop(imageNode, 0, 0, width, height, drools);
+            if (f == null) {
                 return;
             }
-            // Set the new image on the property
-            JCRSessionWrapper bSession=bannerNode.getSession();
-            bannerNode.setProperty(name, newImage);
-            bSession.save();
+
+            AddedNodeFact thumbNode = new AddedNodeFact(imageNode, nodeName, "jnt:resource", drools);
+            if (thumbNode.getNode() != null) {
+                drools.insert(thumbNode);
+                drools.insert(new ChangedPropertyFact(thumbNode, Constants.JCR_DATA, f, drools));
+                drools.insert(new ChangedPropertyFact(thumbNode, Constants.JCR_MIMETYPE, imageNode.getMimeType(), drools));
+                drools.insert(new ChangedPropertyFact(thumbNode, Constants.JCR_LASTMODIFIED, new GregorianCalendar(), drools));
+            }
         }
 
         if (logger.isDebugEnabled()) {
@@ -210,71 +239,42 @@ public class IViewImageService {
     /**
      * Crop a given image within AddedNodeFact and create a new image with suffix
      * @param imageNode
-     * @param suffix
      * @param top
      * @param left
      * @param width
      * @param height
-     * @param session
      * @param drools
      * @return
      * @throws Exception
      */
-    public JCRNodeWrapper crop(AddedNodeFact imageNode, String suffix, int top, int left, int width, int height, JCRSessionWrapper session, KnowledgeHelper drools) throws Exception {
-        JCRNodeWrapper newImage=null;
-        try {
-            JCRNodeWrapper node = imageNode.getNode();
+    public File crop(AddedNodeFact imageNode, int top, int left, int width, int height, KnowledgeHelper drools) throws Exception {
+        String fileExtension = FilenameUtils.getExtension(imageNode.getName());
 
-            // Get selected image
-            Image image = getImageWrapper(imageNode, drools);
-            if (image == null) {
-                return null;
-            }
+        if (isSmallerThan(imageNode.getNode(), width, height)) {
+            logger.info("Selected image was smaller then required image of {}x{} not cropping this image",width,height);
 
-            // get file's extension
-            String fileExtension = FilenameUtils.getExtension(node.getName());
-            if ((fileExtension != null) && (!"".equals(fileExtension))) {
-                fileExtension = "." + fileExtension;
-            }
+            // no need to resize the small image for the cropped
+            final File f = File.createTempFile("thumb", StringUtils.isNotEmpty(fileExtension) ? "." + fileExtension : null, contentTempFolder);
+            JCRContentUtils.downloadFileContent(imageNode.getNode(), f);
+            f.deleteOnExit();
 
-            // Generate new filename
-            String newFileName=FilenameUtils.removeExtension(node.getName()) + suffix + fileExtension;
-
-            // Crop image
-            File f = File.createTempFile(newFileName, fileExtension);
-            imageService.cropImage(image, f, top, left, width, height);
-            InputStream fis = new BufferedInputStream(new FileInputStream(f));
-            try {
-                JCRNodeWrapper dir=node.getParent();
-                String ct=node.getFileContent().getContentType();
-
-                // Remove old node if exists
-                if (dir.hasNode(newFileName)) {
-                    JCRNodeWrapper oldImage = dir.getNode(newFileName);
-                    if (oldImage!=null) {
-                        oldImage.remove();
-                        dir.getSession().save();
-                    }
-                }
-
-                // Save node and image
-                newImage=dir.uploadFile(newFileName, fis, ct);
-                session.save();
-
-                // Continue drools
-                AddedNodeFact thumbNode = new AddedNodeFact(newImage);
-                drools.insert(thumbNode);
-                JCRNodeWrapper contentNode = newImage.getNode(Constants.JCR_CONTENT);
-                drools.insert(new ChangedPropertyFact(new AddedNodeFact(contentNode), Constants.JCR_DATA, f, drools));
-
-            } finally {
-                IOUtils.closeQuietly(fis);
-                f.delete();
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            return f;
         }
-        return newImage;
+
+        Image iw = getImageWrapper(imageNode, drools);
+        if (iw == null) {
+            return null;
+        }
+
+        final File f = File.createTempFile("iview", StringUtils.isNotEmpty(fileExtension) ? "." + fileExtension : null, contentTempFolder);
+
+        if (imageService.cropImage(iw, f, top, left, width, height)) {
+            f.deleteOnExit();
+            return f;
+        } else {
+            f.deleteOnExit();
+            return null;
+        }
     }
 
 }
