@@ -142,16 +142,28 @@ public class IViewImageService {
         JCRNodeWrapper node = session.getNodeByIdentifier(property.getString());
 
         JCRNodeWrapper bannerNodeTrans = (JCRNodeWrapper) property.getParent();
-        JCRNodeWrapper bannerNode = bannerNodeTrans.getParent();
-        JCRNodeWrapper sliderNode = bannerNode.getParent();
+        JCRNodeWrapper sliderNode;
+        if (bannerNodeTrans.getParent().isNodeType("jnt:iViewSlider")) {
+            sliderNode = bannerNodeTrans.getParent();
+        } else {
+            sliderNode = bannerNodeTrans.getParent().getParent();
+        }
 
-        // Calculate needed with/height of the image
-        int border = (int) sliderNode.getProperty("border").getLong();
-        int width = (int) sliderNode.getProperty("width").getLong() - border*2;
-        int height = (int) sliderNode.getProperty("height").getLong() - border*2;
+        int border = 0;
+        int width = 0;
+        int height = 0;
+        try {
+            // Calculate needed with/height of the image
+            border = (int) sliderNode.getProperty("border").getLong();
+            width = (int) sliderNode.getProperty("width").getLong() - border*2;
+            height = (int) sliderNode.getProperty("height").getLong() - border*2;
 
-        // Create a new image
-        cropScale(new AddedNodeFact(node), IViewImageService.iViewNodeName(bannerNode), width, height, session, drools);
+            // Create a new image
+            cropScale(new AddedNodeFact(node), IViewImageService.iViewNodeName(bannerNodeTrans), width, height, session, drools);
+        } catch (PathNotFoundException e) {
+            logger.error("Property to process image not found" + e.getMessage());
+        }
+
     }
 
     /**

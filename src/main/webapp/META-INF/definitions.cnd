@@ -6,7 +6,7 @@
  - width (long) = 960 indexed=no
  - height (long) = 400 indexed=no
  - border (long) = 5 indexed=no
- - skin (string, choicelist) = 'skin 1' indexed=no < 'skin 1','skin 2','skin 3','skin 4','skin 5','skin 6','skin 7'
+ - skin (string, choicelist) = 'skin 1' indexed=no < 'skin 1','skin 2','skin 3','skin 4','skin 5','skin 6','skin 7','none'
  - fx (string, choicelist[resourceBundle]) = 'random' indexed=no < 'random','strip-down-right','strip-down-left','strip-up-right','strip-up-left','strip-up-down','strip-up-down-left','strip-left-right','strip-left-right-down','slide-in-right','slide-in-left','slide-in-up','slide-in-down','left-curtain','right-curtain','top-curtain','bottom-curtain','fade','block-random','block-fade','block-fade-reverse','block-expand','block-expand-reverse','block-expand-random','block-drop-random','zigzag-top','zigzag-bottom','zigzag-grow-top','zigzag-grow-bottom','zigzag-drop-top','zigzag-drop-bottom','strip-left-fade','strip-right-fade','strip-top-fade','strip-bottom-fade'
  - easing (string, choicelist[resourceBundle]) indexed=no < '', 'easeOutQuad','swing','easeOutQuad','easeInOutQuad','easeInCubic','easeOutCubic','easeInOutCubic','easeInQuart','easeOutQuart','easeInOutQuart','easeInQuint','easeOutQuint','easeInOutQuint','easeInSine','easeOutSine','easeInOutSine','easeInExpo','easeOutExpo','easeInOutExpo','easeInCirc','easeOutCirc','easeInOutCirc','easeInElastic','easeOutElastic','easeInOutElastic','easeInBack','easeOutBack','easeInOutBack','easeInBounce','easeOutBounce','easeInOutBounce'
  - strips (long) = 20 indexed=no
@@ -36,7 +36,7 @@
  - pauseLabel (String) = 'Pause' i18n indexed=no
  - closeLabel (String) = 'Close' i18n indexed=no
  - randomStart (boolean) = false indexed=no
- - timer (string, choicelist[resourceBundle]) = 'Pie' indexed=no < 'Pie','360Bar','Bar'
+ - timer (string, choicelist[resourceBundle]) = 'Pie' indexed=no < 'Pie','360Bar','Bar',''
  - timerPosition (string, choicelist[resourceBundle]) = 'top-right' indexed=no < 'top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'
  - timerBG (string,color) = '000' indexed=no
  - timerColor (string,color) = 'EEE' indexed=no

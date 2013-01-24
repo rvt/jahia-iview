@@ -12,7 +12,11 @@
     <template:addResources type="javascript" resources="jquery.easing.js"/>
     <template:addResources type="javascript" resources="jquery.fullscreen.js"/>
     <template:addResources type="javascript" resources="iview.js"/>
-    <template:addResources type="css" resources="${currentNode.properties.skin.string}/style.css, iview.css"/>
+
+    <template:addResources type="css" resources="iview.css"/>
+    <c:if test="${currentNode.properties.skin.string ne 'none'}">
+        <template:addResources type="css" resources="${currentNode.properties.skin.string}/style.css"/>
+    </c:if>
     <template:module path="*"/>
 
     <template:addResources>
