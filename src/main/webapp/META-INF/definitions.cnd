@@ -36,7 +36,7 @@
  - pauseLabel (String) = 'Pause' i18n indexed=no
  - closeLabel (String) = 'Close' i18n indexed=no
  - randomStart (boolean) = false indexed=no
- - timer (string, choicelist[resourceBundle]) = 'Pie' indexed=no < 'Pie','360Bar','Bar',''
+ - timer (string, choicelist[resourceBundle]) = 'Pie' indexed=no < 'Pie','360Bar','Bar'
  - timerPosition (string, choicelist[resourceBundle]) = 'top-right' indexed=no < 'top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'
  - timerBG (string,color) = '000' indexed=no
  - timerColor (string,color) = 'EEE' indexed=no
