@@ -22,6 +22,6 @@ rule "iView Crop Image"
         - the node has the type jnt:iViewSliderItem
         - not in operation import
    then
-        Crop image "image"
+        > iViewImageService.cropScale(property, "image", drools);
         Log "Image cropped " + node.getPath()
 end
