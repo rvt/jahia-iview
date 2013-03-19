@@ -7,7 +7,7 @@
  * For more information, please visit http://www.jahia.com.
  *
  * Copyright (C) 2012-2012 R. van Twisk. All rights reserved.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -41,6 +41,7 @@
 package org.jahia.services.content.rules;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.drools.ObjectFilter;
 import org.drools.spi.KnowledgeHelper;
@@ -50,14 +51,16 @@ import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRPropertyWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.image.Image;
+import org.jahia.services.image.ImageMagickImage;
 import org.jahia.services.image.JahiaImageService;
 import org.jahia.settings.SettingsBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import java.io.File;
+import java.io.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -71,7 +74,7 @@ import java.util.Iterator;
 public class IViewImageService {
 
     private static final Logger logger = LoggerFactory.getLogger(IViewImageService.class);
-    public static final String IVIEW_NODE_NAME_PREFIX ="jahia-iview";
+    public static final String IVIEW_NODE_NAME_PREFIX = "jahia-iview";
 
     private JahiaImageService imageService;
 
@@ -98,8 +101,25 @@ public class IViewImageService {
         return instance;
     }
 
+    private Image getImage(JCRNodeWrapper node) throws IOException, RepositoryException {
+        Node contentNode = node.getNode(Constants.JCR_CONTENT);
+        String fileExtension = FilenameUtils.getExtension(node.getName());
+        File tmp = File.createTempFile("image", StringUtils.isNotEmpty(fileExtension) ? "."
+                + fileExtension : null);
+        InputStream is = contentNode.getProperty(Constants.JCR_DATA).getStream();
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(tmp));
+        try {
+            IOUtils.copy(is, os);
+        } finally {
+            IOUtils.closeQuietly(os);
+            IOUtils.closeQuietly(is);
+        }
+        return new ImageMagickImage(tmp, tmp.getPath());
+    }
+
     /**
      * Get image from imageNpde
+     *
      * @param imageNode
      * @param drools
      * @return
@@ -121,7 +141,7 @@ public class IViewImageService {
         if (it.hasNext()) {
             return (Image) it.next();
         }
-        Image iw = imageService.getImage(imageNode.getNode());
+        Image iw = getImage(imageNode.getNode());
         if (iw == null) {
             return null;
         }
@@ -131,6 +151,7 @@ public class IViewImageService {
 
     /**
      * Cropscale image rule for iView module
+     *
      * @param propertyWrapper
      * @param name
      * @param drools
@@ -155,19 +176,22 @@ public class IViewImageService {
         try {
             // Calculate needed with/height of the image
             border = (int) sliderNode.getProperty("border").getLong();
-            width = (int) sliderNode.getProperty("width").getLong() - border*2;
-            height = (int) sliderNode.getProperty("height").getLong() - border*2;
+            width = (int) sliderNode.getProperty("width").getLong() - border * 2;
+            height = (int) sliderNode.getProperty("height").getLong() - border * 2;
 
             // Create a new image
             cropScale(new AddedNodeFact(node), IViewImageService.iViewNodeName(bannerNodeTrans), width, height, session, drools);
         } catch (PathNotFoundException e) {
             logger.error("Property to process image not found" + e.getMessage());
+        } catch (Exception e) {
+            logger.error("General exception processing image" + e.getMessage());
         }
 
     }
 
     /**
      * Retreive a name for this crop scaled image
+     *
      * @param bannerNode
      * @return
      * @throws Exception
@@ -176,10 +200,10 @@ public class IViewImageService {
         JCRNodeWrapper sliderNode = bannerNode.getParent();
 
         int border = (int) sliderNode.getProperty("border").getLong();
-        int width = (int) sliderNode.getProperty("width").getLong() - border*2;
-        int height = (int) sliderNode.getProperty("height").getLong() - border*2;
+        int width = (int) sliderNode.getProperty("width").getLong() - border * 2;
+        int height = (int) sliderNode.getProperty("height").getLong() - border * 2;
 
-        return IVIEW_NODE_NAME_PREFIX +"_"+width+"x"+height;
+        return IVIEW_NODE_NAME_PREFIX + "_" + width + "x" + height;
     }
 
     private void cropScale(AddedNodeFact imageNode, String nodeName, int width, int height, JCRSessionWrapper session, KnowledgeHelper drools) throws Exception {
@@ -221,6 +245,7 @@ public class IViewImageService {
 
     /**
      * Test if node is smaller or equal then width/height
+     *
      * @param node
      * @param width
      * @param height
@@ -250,6 +275,7 @@ public class IViewImageService {
 
     /**
      * Crop a given image within AddedNodeFact and create a new image with suffix
+     *
      * @param imageNode
      * @param top
      * @param left
@@ -263,7 +289,7 @@ public class IViewImageService {
         String fileExtension = FilenameUtils.getExtension(imageNode.getName());
 
         if (isSmallerThan(imageNode.getNode(), width, height)) {
-            logger.info("Selected image was smaller then required image of {}x{} not cropping this image",width,height);
+            logger.info("Selected image was smaller then required image of {}x{} not cropping this image", width, height);
 
             // no need to resize the small image for the cropped
             final File f = File.createTempFile("thumb", StringUtils.isNotEmpty(fileExtension) ? "." + fileExtension : null, contentTempFolder);
