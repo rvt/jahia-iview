@@ -56,6 +56,7 @@
  - image (weakreference, picker[type='image']) i18n mandatory
  - transition (string,choicelist[resourceBundle]) indexed=no multiple < 'strip-down-right', 'strip-down-left', 'strip-up-right', 'strip-up-left', 'strip-up-down', 'strip-up-down-left', 'strip-left-right', 'strip-left-right-down', 'slide-in-right', 'slide-in-left', 'slide-in-up', 'slide-in-down', 'left-curtain', 'right-curtain', 'top-curtain', 'bottom-curtain', 'fade', 'block-random', 'block-fade', 'block-fade-reverse', 'block-expand', 'block-expand-reverse', 'block-expand-random', 'block-drop-random', 'zigzag-top', 'zigzag-bottom', 'zigzag-grow-top', 'zigzag-grow-bottom', 'zigzag-drop-top', 'zigzag-drop-bottom', 'strip-left-fade', 'strip-right-fade', 'strip-top-fade', 'strip-bottom-fade'
  - pauseTime (long) indexed=no
+ - link (weakreference) < jnt:page
  + * (jnt:iViewSliderCaption)
 
 [jnt:iViewSliderCaption] > jnt:content

@@ -1,6 +1,11 @@
 /* The slider */
 .iviewSlider {
 	overflow: hidden;
+    position: relative;
+}
+
+.iviewid {
+    position: relative;
 }
 
 /* The timer in the Slider */
@@ -13,6 +18,10 @@
 
 #iview-timer div {
 	border-radius: 3px;
+}
+
+.linkedBanner {
+    display: block;
 }
 
 /* The Preloader in the Slider */
