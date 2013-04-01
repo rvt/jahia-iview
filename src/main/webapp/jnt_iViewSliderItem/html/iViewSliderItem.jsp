@@ -20,9 +20,22 @@
     <jcr:node path="${currentNode.properties['image']}" var="jahia-iview"/>
     <%-- make div or a tag --%>
     <c:choose>
-        <c:when test="${not empty currentNode.properties['link']}">
-            <c:url value="${url.base}${currentNode.properties['link'].node.path}.html" var="link" />
-            <a class="linkedBanner" href="${link}"
+        <c:when test="${not empty currentNode.properties.link || not empty currentNode.properties.externalLink}">
+            <c:if test="${not empty currentNode.properties.link}">
+                <c:choose>
+                    <c:when test="${jcr:isNodeType(currentNode.properties.link.node, 'nt:file')}">
+                        <c:url value="${url.files}${currentNode.properties.link.node.path}" var="link" />
+                    </c:when>
+                    <c:otherwise>
+                        <c:url value="${url.base}${currentNode.properties.link.node.path}.html" var="link" />
+                    </c:otherwise>
+                </c:choose>
+
+            </c:if>
+            <c:if test="${not empty currentNode.properties.externalLink}">
+                <c:url value="${currentNode.properties.externalLink.string}" var="link" />
+            </c:if>
+            <a class="linkedBanner" href="${link}"<c:if test="${not empty currentNode.properties['j:target']}"> target="${currentNode.properties['j:target'].string}"</c:if>
         </c:when>
         <c:otherwise>
             <div
