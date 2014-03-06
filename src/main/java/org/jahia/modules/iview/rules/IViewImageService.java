@@ -38,7 +38,15 @@
  * please contact the sales department at sales@jahia.com.
  */
 
-package org.jahia.services.content.rules;
+package org.jahia.modules.iview.rules;
+
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
+import java.io.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -50,20 +58,14 @@ import org.jahia.services.content.JCRContentUtils;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRPropertyWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
+import org.jahia.services.content.rules.AddedNodeFact;
+import org.jahia.services.content.rules.ChangedPropertyFact;
 import org.jahia.services.image.Image;
 import org.jahia.services.image.ImageMagickImage;
 import org.jahia.services.image.JahiaImageService;
 import org.jahia.settings.SettingsBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
-import java.io.*;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 
 /**
  * Imaging service.
@@ -158,11 +160,17 @@ public class IViewImageService {
      * @throws Exception
      */
     public void cropScale(ChangedPropertyFact propertyWrapper, String name, KnowledgeHelper drools) throws Exception {
-        final JCRPropertyWrapper property = propertyWrapper.getProperty();
+//        final JCRPropertyWrapper property = propertyWrapper.getProperty();
+//        final JCRSessionWrapper session = property.getSession();
+//        JCRNodeWrapper node = session.getNodeByIdentifier(property.getString());
+
+        JCRNodeWrapper definitionNode = propertyWrapper.getNode().getNode();
+        final JCRPropertyWrapper property = definitionNode.getProperty(propertyWrapper.getName());
         final JCRSessionWrapper session = property.getSession();
         JCRNodeWrapper node = session.getNodeByIdentifier(property.getString());
 
-        JCRNodeWrapper bannerNodeTrans = (JCRNodeWrapper) property.getParent();
+
+        JCRNodeWrapper bannerNodeTrans = property.getParent();
         JCRNodeWrapper sliderNode;
         if (bannerNodeTrans.getParent().isNodeType("jnt:iViewSlider")) {
             sliderNode = bannerNodeTrans.getParent();
@@ -223,6 +231,7 @@ public class IViewImageService {
                 drools.insert(new ChangedPropertyFact(thumbNode, Constants.JCR_LASTMODIFIED, new GregorianCalendar(), drools));
             }
         } else {
+
             File f = crop(imageNode, 0, 0, width, height, drools);
             if (f == null) {
                 return;

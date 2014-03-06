@@ -3,6 +3,7 @@ package org.jahia.services.content.rules
 #list any import classes here.
 import org.jahia.services.content.rules.*
 import org.jahia.services.content.JCRContentUtils
+import org.jahia.modules.iview.rules.IViewImageService
 import org.slf4j.Logger
 
 expander rules.dsl
@@ -11,7 +12,6 @@ expander rules.dsl
 global User user
 global Service service
 global IViewImageService iViewImageService
-global ExtractionService extractionService
 global Logger logger
 global JCRContentUtils jcrUtils
 
@@ -23,5 +23,5 @@ rule "iView Crop Image"
         - not in operation import
    then
         > iViewImageService.cropScale(property, "image", drools);
-        Log "Image cropped " + node.getPath()
+        Log "iView Image cropped " + node.getPath()
 end

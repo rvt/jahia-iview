@@ -8,7 +8,7 @@
             <property name="globalRulesObject">
                 <map>
                     <entry key="iViewImageService">
-                        <bean id="iViewImageService" class="org.jahia.services.content.rules.IViewImageService" factory-method="getInstance">
+                        <bean id="iViewImageService" class="org.jahia.modules.iview.rules.IViewImageService" factory-method="getInstance">
                             <property name="imageService" ref="${imageService}"/>
                         </bean>
                     </entry>
