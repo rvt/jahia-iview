@@ -207,9 +207,24 @@ public class IViewImageService {
     public static String iViewNodeName(JCRNodeWrapper bannerNode) throws Exception {
         JCRNodeWrapper sliderNode = bannerNode.getParent();
 
-        int border = (int) sliderNode.getProperty("border").getLong();
-        int width = (int) sliderNode.getProperty("width").getLong() - border * 2;
-        int height = (int) sliderNode.getProperty("height").getLong() - border * 2;
+        int border;
+        int width;
+        int height;
+        try {
+            border = (int) sliderNode.getProperty("border").getLong();
+        } catch (PathNotFoundException e) {
+            border = 0;
+        }
+        try {
+            width = (int) sliderNode.getProperty("width").getLong() - border * 2;
+        } catch (PathNotFoundException e) {
+            width = 0;
+        }
+        try {
+            height = (int) sliderNode.getProperty("height").getLong() - border * 2;
+        } catch (PathNotFoundException e) {
+            height = 0;
+        }
 
         return IVIEW_NODE_NAME_PREFIX + "_" + width + "x" + height;
     }

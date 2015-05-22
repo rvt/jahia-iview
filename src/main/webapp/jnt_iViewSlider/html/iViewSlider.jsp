@@ -75,21 +75,29 @@
 
     <template:addResources type="inlinecss">
         <style>
+            <c:choose>
+                <c:when test="${not empty currentNode.properties.border}">
+                    <c:set var="iviewborder" value="${currentNode.properties.border.long}" />
+                </c:when>
+                <c:otherwise>
+                    <c:set var="iviewborder" value="0" />
+                </c:otherwise>
+            </c:choose>
             .container {
                 <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long}px;</c:if>
             }
             .iviewid {
                 margin: 0;
-                padding: ${currentNode.properties.border.long}px;
+                padding: ${iviewborder}px;
             }
 
             #iview-${currentNode.UUID} {
-                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long-currentNode.properties.border.long*2}px;</c:if>
-                <c:if test="${not empty currentNode.properties.height}">height:${currentNode.properties.height.long-currentNode.properties.border.long*2}px;</c:if>
+                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long-iviewborder*2}px;</c:if>
+                <c:if test="${not empty currentNode.properties.height}">height:${currentNode.properties.height.long-iviewborder*2}px;</c:if>
             }
             #iview-${currentNode.UUID} .iviewSlider {
-                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long-currentNode.properties.border.long*2}px;</c:if>
-                <c:if test="${not empty currentNode.properties.height}">height:${currentNode.properties.height.long-currentNode.properties.border.long*2}px;</c:if>
+                <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long-iviewborder*2}px;</c:if>
+                <c:if test="${not empty currentNode.properties.height}">height:${currentNode.properties.height.long-iviewborder*2}px;</c:if>
             }
         </style>
     </template:addResources>
