@@ -6,12 +6,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
+<template:addResources type="javascript" resources="jquery.js"/>
+<template:addResources type="javascript" resources="raphael-min.js"/>
+<template:addResources type="javascript" resources="jquery.easing.js"/>
+<template:addResources type="javascript" resources="jquery.fullscreen.js"/>
+<template:addResources type="javascript" resources="iview.js"/>
+
 <c:if test="${not renderContext.editMode}">
-    <template:addResources type="javascript" resources="jquery.js"/>
-    <template:addResources type="javascript" resources="raphael-min.js"/>
-    <template:addResources type="javascript" resources="jquery.easing.js"/>
-    <template:addResources type="javascript" resources="jquery.fullscreen.js"/>
-    <template:addResources type="javascript" resources="iview.js"/>
 
     <template:addResources type="css" resources="iview.css"/>
     <c:if test="${currentNode.properties.skin.string ne 'none'}">
@@ -83,7 +84,7 @@
                     <c:set var="iviewborder" value="0" />
                 </c:otherwise>
             </c:choose>
-            .container {
+            .iviewcontainer {
                 <c:if test="${not empty currentNode.properties.width}">width:${currentNode.properties.width.long}px;</c:if>
             }
             .iviewid {
@@ -105,7 +106,7 @@
 
 <template:addResources type="css" resources="iview-jahia.css"/>
 
-<div class="container">
+<div class="iviewcontainer">
     <div class="iviewid" id="iview-${currentNode.UUID}" <c:if test="${renderContext.editMode}">style="background-color:#a0a0a0" </c:if> >
         <c:forEach items="${currentNode.nodes}" var="items">
             <template:module node="${items}" />

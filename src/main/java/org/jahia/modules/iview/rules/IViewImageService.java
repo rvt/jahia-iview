@@ -51,8 +51,8 @@ import java.util.Iterator;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.drools.ObjectFilter;
-import org.drools.spi.KnowledgeHelper;
+import org.drools.core.ObjectFilter;
+import org.drools.core.spi.KnowledgeHelper;
 import org.jahia.api.Constants;
 import org.jahia.services.content.JCRContentUtils;
 import org.jahia.services.content.JCRNodeWrapper;
@@ -75,7 +75,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IViewImageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(IViewImageService.class);
+    private transient static Logger logger = LoggerFactory.getLogger(IViewImageService.class);
     public static final String IVIEW_NODE_NAME_PREFIX = "jahia-iview";
 
     private JahiaImageService imageService;
@@ -88,16 +88,12 @@ public class IViewImageService {
 
     private static File contentTempFolder;
 
-    public static IViewImageService getInstance() {
+    public static synchronized IViewImageService getInstance() {
         if (instance == null) {
-            synchronized (IViewImageService.class) {
-                if (instance == null) {
-                    instance = new IViewImageService();
-                    contentTempFolder = new File(SettingsBean.getInstance().getTmpContentDiskPath());
-                    if (!contentTempFolder.exists()) {
-                        contentTempFolder.mkdirs();
-                    }
-                }
+            instance = new IViewImageService();
+            contentTempFolder = new File(SettingsBean.getInstance().getTmpContentDiskPath());
+            if (!contentTempFolder.exists()) {
+                contentTempFolder.mkdirs();
             }
         }
         return instance;
@@ -134,7 +130,7 @@ public class IViewImageService {
                     try {
                         return (((Image) o).getPath().equals(imageNode.getPath()));
                     } catch (RepositoryException e) {
-                        e.printStackTrace();
+                        logger.error(e.getMessage(), e);
                     }
                 }
                 return false;

@@ -1,5 +1,5 @@
-/* Replace #iview with .iviewid */
-.container {
+/* Replace #iview .with .iviewid */
+.iviewcontainer {
 	display: block;
 	margin: 0px auto;
 }
@@ -25,7 +25,7 @@
 	margin: 0px auto;
 }
 
-#iview2 {
+.iviewid {
 	display: block;
 	width: 300px;
 	background: #000;
@@ -39,14 +39,14 @@
 	box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
 }
 
-#iview2 .iviewSlider {
+.iviewid .iviewSlider {
 	display: block;
 	width: 300px;
 	height: 600px;
 	margin: 0px auto;
 }
 
-.iview div.iview-directionNav {
+.iviewid div.iview-directionNav {
 	position: absolute;
 	top: 37%;
 	left: 0px;
@@ -54,11 +54,11 @@
 	width: 100%;
 }
 
-#iview2 div.iview-directionNav {
+.iviewid div.iview-directionNav {
 	top: 49%;
 }
 
-.iview div.iview-directionNav a {
+.iviewid div.iview-directionNav a {
 	display: block;
 	cursor: pointer;
 	position: absolute;
@@ -78,35 +78,35 @@
 	transition-property: left,right;
 }
 
-.iview div.iview-directionNav a.iview-nextNav {
+.iviewid div.iview-directionNav a.iview-nextNav {
 	right: -27px;
 	background-position: 27px 0px;
 }
 
-.iview div.iview-directionNav a.iview-prevNav {
+.iviewid div.iview-directionNav a.iview-prevNav {
 	left: -27px;
 	background-position: 0px 0px
 }
 
-.iview.iview-hover div.iview-directionNav a.iview-nextNav {
+.iviewid.iview-hover div.iview-directionNav a.iview-nextNav {
 	right: 20px;
 }
 
-.iview.iview-hover div.iview-directionNav a.iview-prevNav {
+.iviewid.iview-hover div.iview-directionNav a.iview-prevNav {
 	left: 20px;
 }
 
-#iview2 .iview-controlNav {
+.iviewid .iview-controlNav {
 	position: absolute;
 	bottom: 30px;
 	left: 133px;
 }
 
-#iview2 .iview-controlNav a {
+.iviewid .iview-controlNav a {
 	text-indent: -9999px;
 }
 
-#iview2 .iview-controlNav a.iview-control {
+.iviewid .iview-controlNav a.iview-control {
 	padding: 0px;
 	float: left;
 	width: 11px;
@@ -116,7 +116,7 @@
 	margin-right: 7px;
 }
 
-#iview2 .iview-controlNav a.iview-control.active {
+.iviewid .iview-controlNav a.iview-control.active {
 	background-position: 0px -11px;
 }
 

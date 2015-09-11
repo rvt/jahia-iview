@@ -1,5 +1,5 @@
 /* Replace #iview with .iviewid */
-.container {
+.iviewcontainer {
 	display: block;
 	width: 910px;
 	margin: 0px auto;

@@ -1,61 +1,41 @@
-/* Replace #iview .with .iviewid */
-.container {
+/* Replace #iview with .iviewid */
+.iviewcontainer {
 	display: block;
 	margin: 0px auto;
 }
 
 .iviewid {
 	display: block;
-	width: 728px;
+/*	max-width: 960px;*/
+	min-width: 300px;
 	background: #000;
-	background: rgba(0, 0, 0, 1);
+	background: rgba(0, 0, 0, 0.7);
 	padding: 5px;
+	border-radius: 5px;
 	position: relative;
-	margin: 40px auto;
-	overflow: hidden;
 	-webkit-box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
+	margin: 40px auto;
+	overflow: hidden;
 }
 
 .iviewid .iviewSlider {
 	display: block;
-	width: 728px;
-	height: 90px;
-	margin: 0px auto;
-}
-
-.iviewid {
-	display: block;
-	width: 300px;
-	background: #000;
-	background: rgba(0, 0, 0, 1);
-	padding: 5px;
-	position: relative;
-	margin: 40px auto;
+	width: 900px;
+	height: 400px;
 	overflow: hidden;
-	-webkit-box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
-	box-shadow: 0 38px 30px -18px rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
 }
 
-.iviewid .iviewSlider {
-	display: block;
-	width: 300px;
-	height: 600px;
-	margin: 0px auto;
-}
+
 
 .iviewid div.iview-directionNav {
 	position: absolute;
-	top: 37%;
+	top: 47%;
 	left: 0px;
 	z-index: 9;
 	width: 100%;
-}
-
-.iviewid div.iview-directionNav {
-	top: 49%;
 }
 
 .iviewid div.iview-directionNav a {
@@ -64,7 +44,7 @@
 	position: absolute;
 	width: 27px;
 	height: 27px;
-	background-image: url(../img/bg_direction_nav_white.png);
+	background-image: url(../img/bg_direction_nav.png);
 	text-indent: -9999px;
 	-webkit-transition: left 0.3s ease-in-out;
 	-webkit-transition-property: left,right;
@@ -94,30 +74,6 @@
 
 .iviewid.iview-hover div.iview-directionNav a.iview-prevNav {
 	left: 20px;
-}
-
-.iviewid .iview-controlNav {
-	position: absolute;
-	bottom: 30px;
-	left: 133px;
-}
-
-.iviewid .iview-controlNav a {
-	text-indent: -9999px;
-}
-
-.iviewid .iview-controlNav a.iview-control {
-	padding: 0px;
-	float: left;
-	width: 11px;
-	height: 11px;
-	background: url('../img/bullets_2.png') no-repeat 0px 0px;
-	line-height: 0px;
-	margin-right: 7px;
-}
-
-.iviewid .iview-controlNav a.iview-control.active {
-	background-position: 0px -11px;
 }
 
 .iview-caption {
